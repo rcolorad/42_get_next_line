@@ -1,14 +1,15 @@
 #include "get_next_line.h"
 
+size_t  ft_strlen(char *s)
+{
+  return (0);
+}
+
 char  *ft_strdup(char *s1)
 {
   return (NULL);
 }
 
-size_t  ft_strlen(char *s)
-{
-  return (0);
-}
 
 char  *ft_substr(char *s, unsigned int start, size_t len)
 {

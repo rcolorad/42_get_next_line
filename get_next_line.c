@@ -1,78 +1,106 @@
 #include "get_next_line.h"
-#include <sys/types.h>
 
-static char *get_line(int fd, char *buffer, char *chars_left)
+static char *fill_store(int fd, char *store, char *buffer)
 {
-  ssize_t bytes_read;
-  char  *temporal;
+  ssize_t bytes;
 
-  bytes_read = 1;
-  while (bytes_read > 0)
+  bytes = 1;
+  if (!store)
+    store = ft_strdup("");
+  while (bytes > 0)
   {
-    bytes_read = read(fd, buffer, BUFFER_SIZE);
-    if (bytes_read == -1)
+    bytes = read(fd, buffer, BUFFER_SIZE);
+    if (bytes == -1)
     {
       free(buffer);
       return (NULL);
     }
-    else if (bytes_read == 0)
-      break;
-    buffer[bytes_read] = 0;
-    if (!buffer)
-      buffer = ft_strdup("");
-    temporal = buffer;
-    buffer = ft_strjoin(temporal, buffer);
-    free(temporal);
-    temporal = NULL;
+    buffer[bytes] = '\0';
+    store = ft_strjoin(store, buffer);
     if (ft_strchr(buffer, '\n'))
       break;
   }
-  return(buffer);
+  free(buffer);
+  return (store);
 }
 
-static char *set_line(char *line_read)
+static char *get_new_store(char *store)
 {
-  char  *buffer;
-  ssize_t i;
+  int len;
+  int i;
+  char *new_store;
   
+  len = 0;
   i = 0;
-  while (line_read[i] != '\n' && line_read[i] != '\0')
-    i++;
-  if (line_read[i] == '\0' || line_read[1] == '\0')
+  if (store == NULL)
     return (NULL);
-  buffer = ft_substr(line_read, i + 1, ft_strlen(line_read) - i);
-  if (*buffer == 0)
+  while (store[len] != '\n' && store[len])
+    len++;
+  if (store[len] == '\n')
+    len++;
+  new_store = (char *) malloc((ft_strlen(store) - len + 1) * sizeof(char));
+  if (!new_store)
+    return (NULL);
+  while (store[len + i])
   {
-    free(buffer);
-    buffer = NULL;
+    new_store[i] = store[len + i];
+    i++;
   }
-  line_read[i + 1] = '\0';
-  return (buffer);
+  free (store);
+  new_store[i] = '\0';
+  return (new_store);
+}
+
+static char *get_line(char *store, char *line)
+{
+  int len;
+  int i;
+
+  len = 0;
+  i = 0;
+  if (store == NULL)
+    return (NULL);
+  while (store[len] != '\n' && store[len])
+    len++;
+  if (store[len] == '\n')
+    len++;
+  line = (char *) malloc((len + 1) * sizeof(char));
+  if (!line)
+    return (NULL);
+  while (i < len)
+  {
+    line[i] = store[i];
+    i++;
+  }
+  line[i] = '\0';
+  return (line);
 }
 
 char	*get_next_line(int fd)
 {
-  static char *chars_left;
+  static char *store;
   char  *buffer;
   char  *line;
 
   line = NULL;
   buffer = (char *) malloc ((BUFFER_SIZE + 1) * sizeof(char));
-  if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
+  if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
   {
-    free(chars_left);
+    free(store);
     free(buffer);
     buffer = NULL;
-    chars_left = NULL;
+    store = NULL;
     return (NULL);
   }
   if (!buffer)
     return(NULL);
-  line = get_line(fd, buffer, chars_left);
-  free(buffer);
-  if (!line)
-    return (NULL);
-  chars_left = set_line(line);
+  store = fill_store(fd, store, buffer);
+  if (*store == 0)
+  {
+    free(store);
+    return(store = 0);
+  }
+  line = get_line(store, line);
+  store = get_new_store(store);
   return (line);
 }
-

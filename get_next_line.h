@@ -8,6 +8,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <stdio.h>
 
 char  *get_next_line(int fd);
 char  *ft_strdup(char *s);
