@@ -95,7 +95,7 @@ char	*get_next_line(int fd)
   if (!buffer)
     return(NULL);
   store = fill_store(fd, store, buffer);
-  if (*store == 0)
+  if (*store == '\0')
   {
     free(store);
     return(store = 0);
@@ -104,3 +104,26 @@ char	*get_next_line(int fd)
   store = get_new_store(store);
   return (line);
 }
+
+/*
+int main(void)
+{
+  int fd = open("test.txt", O_RDONLY);
+  char *line;
+
+  if (fd < 0)
+  {
+    perror("Error opening file");
+    return 1;
+  }
+
+  while ((line = get_next_line(fd)) != NULL)
+  {
+    printf("%s", line);
+    free(line);
+  }
+  
+  close(fd);
+  return 0;
+}
+*/

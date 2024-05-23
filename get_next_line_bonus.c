@@ -94,7 +94,7 @@ char	*get_next_line(int fd)
   if (!buffer)
     return(NULL);
   store[fd] = fill_store(fd, store[fd], buffer);
-  if (*store[fd] == 0)
+  if (*store[fd] == '\0')
   {
     free(store[fd]);
     return(store[fd] = 0);
