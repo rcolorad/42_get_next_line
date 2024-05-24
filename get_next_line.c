@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:47 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/24 12:52:49 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:05:50 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,20 +121,20 @@ char	*get_next_line(int fd)
 int	main(void)
 {
 	int	fd;
-  char *line;
+	char *line;
 
-  fd = open("test.txt", O_RDONLY);
-  if (fd < 0)
-  {
-	perror("Error opening file");
-	return (1);
-  }
-  while ((line = get_next_line(fd)) != NULL)
-  {
-	printf("%s", line);
-	free(line);
-  }
-  close(fd);
-  return (0);
+	fd = open("text2.txt", O_RDONLY);
+	if (fd < 0)
+	{
+		perror("Error opening file");
+		return (1);
+	}
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return (0);
 }
 */
