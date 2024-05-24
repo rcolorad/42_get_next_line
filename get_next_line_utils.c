@@ -1,12 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/24 12:52:40 by rcolorad          #+#    #+#             */
+/*   Updated: 2024/05/24 12:52:45 by rcolorad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	if (s[i] == '\0')
-		return (0);
 	while (s[i] != '\0')
 		i++;
 	return (i);
@@ -29,23 +39,23 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[i])
 		tab[j++] = s2[i++];
 	tab[j] = 0;
-	free ((void *)(s1));
+	free((void *)(s1));
 	return (tab);
 }
 
 char	*ft_strchr(const char *s, int c)
 {
-	unsigned int	i;
+	size_t	i;
 
 	i = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] == (char) c)
-			return ((char *) &s[i]);
+		if (s[i] == (char)c)
+			return ((char *)&s[i]);
 		i++;
 	}
-	if (s[i] == (char) c)
-		return ((char *) &s[i]);
+	if (s[i] == (char)c)
+		return ((char *)&s[i]);
 	return (NULL);
 }
 
