@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:47 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/27 17:46:08 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:05:53 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static char	*free_store(char *store)
 	int		len;
 	
 	len = 0;
+	if (!store)
+		return (NULL);
 	while (store[len] != '\0' && store[len] != '\n')
 		len++;
 	if (store[len] == '\n')
@@ -27,6 +29,32 @@ static char	*free_store(char *store)
 	if (!aux)
 		return (NULL);
 	return (aux);
+}
+
+static char	*get_line(char *store)
+{
+	char	*line;
+	int		len;
+	
+	len = 0;
+	if (!store || store[len] == '\0')
+		return (NULL);
+	while (store[len] != '\0' && store[len] != '\n')
+		len++;
+	if (store[len] == '\n')
+		len++;
+	line = ft_calloc(sizeof(char), len + 1);
+	if (!line)
+		return (NULL);
+	len = 0;
+	while (store[len] != '\0' && store[len] != '\n')
+	{
+		line[len] = store[len];
+		len++;
+	}
+	if (store[len] == '\n')
+		line[len] = store[len];
+	return (line);
 }
 
 static char	*read_file(int fd, char *store)
@@ -45,59 +73,36 @@ static char	*read_file(int fd, char *store)
 		{
 			free(buffer);
 			free(store);
-			store = NULL;
 			return (NULL);
 		}
+		buffer[bytes] = '\0';
 		store = ft_strjoin(store, buffer);
+		if (!store)
+		{
+			free(buffer);
+			return (NULL);
+		}
 	}
 	free(buffer);
 	return (store);
-}
-
-static char	*get_line(char *store)
-{
-	char	*line;
-	int		len;
-	
-	len = 0;
-	if (!store || store[len] == '\0')
-		return (NULL);
-	while (store[len] && store[len] != '\n')
-		len++;
-	if (store[len] == '\n')
-		len++;
-	line = ft_calloc(sizeof(char), len + 1);
-	if (!line)
-		return (NULL);
-	len = 0;
-	while (store[len] && store[len] != '\n')
-	{
-		line[len] = store[len];
-		len++;
-	}
-	if (store[len] == '\n')
-		line[len] = store[len];
-	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*store;
 	char		*line;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (free(store), NULL);
 	store = read_file(fd, store);
 	if (!store)
 		return (NULL);
 	line = get_line(store);
-	if (!line)
+	if (!line && store)
 	{
-		if (store)
-		{
-			free(store);
-			store = NULL;
-			return (NULL);
-		}
+		free(store);
+		store = NULL;
+		return (NULL);
 	}
 	store = free_store(store);
 	return (line);
@@ -109,7 +114,7 @@ int	main(void)
 	int	fd;
 	char *line;
 
-	fd = open("quijote.txt", O_RDONLY);
+	fd = open("text2.txt", O_RDONLY);
 	if (fd < 0)
 	{
 		perror("Error opening file");

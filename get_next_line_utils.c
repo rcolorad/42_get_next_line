@@ -6,13 +6,13 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:40 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/27 17:40:33 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:03:14 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(char *s)
 {
 	size_t	i;
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		j;
@@ -44,14 +44,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 		j++;
 	}
-	free((void *)s1);
+	free(s1);
 	s1 = NULL;
 	return (join);
 }
 
-int	ft_strchr(const char *s, int c)
+int	ft_strchr(char *s, int c)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -69,10 +69,10 @@ void	*ft_calloc(size_t count, size_t size)
 	size_t	i;
 
 	i = 0;
-	ptr = malloc(count * size);
+	ptr = malloc(size * count);
 	if (!ptr)
 		return (NULL);
-	while (i < (count * size))
+	while (i < (size * count))
 	{
 		ptr[i] = 0;
 		i++;
@@ -80,7 +80,7 @@ void	*ft_calloc(size_t count, size_t size)
 	return (ptr);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*copy;
 	int		i;
