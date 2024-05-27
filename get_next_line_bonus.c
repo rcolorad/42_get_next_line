@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:03 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/24 18:05:27 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:19:50 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static char	*get_line(char *store, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*store[MAX_FD];
+	static char	*store[FOPEN_MAX];
 	char		*buffer;
 	char		*line;
 
@@ -117,61 +117,37 @@ char	*get_next_line(int fd)
 	return (line);
 }
 /*
-int	main(void)
-{
-	int	fd1;
-	int fd2;
-	int fd3;
+int main(void){
+	int fds[2];
+	char *files[2] = {"text.txt", "text2.txt"};
 	char *line;
+	int openf = 0;
+	for(int i = 0; i< 2; i++)
+	{
+		fds[i] = open(files[i], O_RDONLY);
+		openf++;		
 
-	fd1 = open("text.txt", O_RDONLY);
-	fd2 = open("text2.txt", O_RDONLY);
-	fd3 = open("text3.txt", O_RDONLY);
-	if (fd1 < 0)
-	{
-		perror("Error opening file 1");
-		return (1);
 	}
-	if (fd2 < 0)
+	
+	int active = openf;
+	while(active > 0)
 	{
-		perror("Error opening file 2");
-		return (1);
+		for(int i = 0; i < openf; i++)
+		{
+			if((line = get_next_line(fds[i])) != NULL)
+			{
+				printf("%s", line);
+				free(line);	
+			}				
+			else
+			{
+				fds[i] = -1;
+				close(fds[i]);
+				active--;
+			}
+
+		}
 	}
-	if (fd3 < 0)
-	{
-		perror("Error opening file 3");
-		return (1);
-	}
-	int i = 0;
-	while (i < 6)
-	{
-		line = get_next_line(fd1);
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd2);
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd3);
-		printf("%s", line);
-		free(line);
-		i++;
-	}
-	while (i < 12)
-	{
-		line = get_next_line(fd1);
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd2);
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd3);
-		printf("%s", line);
-		free(line);
-		i++;
-	}
-	close(fd1);
-	close(fd2);
-	close(fd3);
-	return (0);
+	return 0;
 }
 */

@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:26 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/24 12:52:27 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:19:20 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@
 #  define BUFFER_SIZE 10
 # endif
 
-# define MAX_FD 1024
+# include <limits.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-char	*ft_strdup(char *s);
-size_t	ft_strlen(char *s);
-char	*ft_substr(char *s, unsigned int start, size_t len);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strchr(char *s, int c);
+char	*ft_strdup(const char *s1);
+size_t	ft_strlen(const char *s);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strchr(const char *s, int c);
 
 #endif
