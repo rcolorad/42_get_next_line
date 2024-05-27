@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:30 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/24 12:52:30 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:40:43 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 char	*get_next_line(int fd);
 char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+void	*ft_calloc(size_t count, size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strchr(const char *s, int c);
+int	    ft_strchr(const char *s, int c);
 
 #endif

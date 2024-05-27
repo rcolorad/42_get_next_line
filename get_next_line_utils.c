@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:40 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/24 12:52:45 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:40:33 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,79 +26,75 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		i;
 	int		j;
-	char	*tab;
+	char	*join;
 
 	i = 0;
 	j = 0;
-	tab = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (!tab)
+	join = ft_calloc(sizeof(char), ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!join)
 		return (NULL);
 	while (s1[i])
-		tab[j++] = s1[i++];
-	i = 0;
-	while (s2[i])
-		tab[j++] = s2[i++];
-	tab[j] = 0;
-	free((void *)(s1));
-	return (tab);
+	{	
+		join[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{	
+		join[i] = s2[j];
+		i++;
+		j++;
+	}
+	free((void *)s1);
+	s1 = NULL;
+	return (join);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	ft_strchr(const char *s, int c)
 {
 	size_t	i;
 
 	i = 0;
-	while (s[i] != '\0')
+	while (s[i])
 	{
 		if (s[i] == (char)c)
-			return ((char *)&s[i]);
+			return (1);
 		i++;
 	}
-	if (s[i] == (char)c)
-		return ((char *)&s[i]);
-	return (NULL);
+	return (0);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+void	*ft_calloc(size_t count, size_t size)
 {
-	unsigned int	i;
-	char			*tab;
+	char	*ptr;
+	size_t	i;
 
 	i = 0;
-	if (!s)
+	ptr = malloc(count * size);
+	if (!ptr)
 		return (NULL);
-	if (start >= ft_strlen(s))
-		return (malloc(1));
-	if (len >= ft_strlen(s + start))
-		len = ft_strlen(s + start);
-	tab = malloc(sizeof(char) * (len) + 1);
-	if (!tab)
-		return (NULL);
-	while (len > 0)
+	while (i < (count * size))
 	{
-		tab[i++] = s[start++];
-		len--;
+		ptr[i] = 0;
+		i++;
 	}
-	tab[i] = '\0';
-	return (tab);
+	return (ptr);
 }
 
 char	*ft_strdup(const char *s1)
 {
-	char	*tab;
+	char	*copy;
 	int		i;
 	int		len;
 
 	len = ft_strlen(s1);
 	i = 0;
-	tab = malloc(sizeof(char) * len + 1);
-	if (!tab)
+	copy = ft_calloc(sizeof(char), len + 1);
+	if (!copy)
 		return (NULL);
 	while (s1[i])
 	{
-		tab[i] = s1[i];
+		copy[i] = s1[i];
 		i++;
 	}
-	tab[i] = '\0';
-	return (tab);
+	return (copy);
 }
