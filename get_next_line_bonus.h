@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:26 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/27 16:19:20 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/28 12:39:43 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 #  define BUFFER_SIZE 10
 # endif
 
-# include <limits.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 
 char	*get_next_line(int fd);
 char	*ft_strdup(const char *s1);

@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:53:00 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/24 12:53:01 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/28 12:39:34 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	i = 0;
 	j = 0;
-	tab = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	tab = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!tab)
 		return (NULL);
 	while (s1[i])
@@ -57,30 +57,6 @@ char	*ft_strchr(const char *s, int c)
 	if (s[i] == (char)c)
 		return ((char *)&s[i]);
 	return (NULL);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	unsigned int	i;
-	char			*tab;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	if (start >= ft_strlen(s))
-		return (malloc(1));
-	if (len >= ft_strlen(s + start))
-		len = ft_strlen(s + start);
-	tab = malloc(sizeof(char) * (len) + 1);
-	if (!tab)
-		return (NULL);
-	while (len > 0)
-	{
-		tab[i++] = s[start++];
-		len--;
-	}
-	tab[i] = '\0';
-	return (tab);
 }
 
 char	*ft_strdup(const char *s1)

@@ -6,115 +6,124 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:47 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/27 18:05:53 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/28 12:36:41 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*free_store(char *store)
+static char	*fill_store(int fd, char *store, char *buffer)
 {
-	char	*aux;
-	int		len;
-	
-	len = 0;
-	if (!store)
-		return (NULL);
-	while (store[len] != '\0' && store[len] != '\n')
-		len++;
-	if (store[len] == '\n')
-		len++;
-	aux = ft_strdup(store + len);
-	free(store);
-	if (!aux)
-		return (NULL);
-	return (aux);
-}
-
-static char	*get_line(char *store)
-{
-	char	*line;
-	int		len;
-	
-	len = 0;
-	if (!store || store[len] == '\0')
-		return (NULL);
-	while (store[len] != '\0' && store[len] != '\n')
-		len++;
-	if (store[len] == '\n')
-		len++;
-	line = ft_calloc(sizeof(char), len + 1);
-	if (!line)
-		return (NULL);
-	len = 0;
-	while (store[len] != '\0' && store[len] != '\n')
-	{
-		line[len] = store[len];
-		len++;
-	}
-	if (store[len] == '\n')
-		line[len] = store[len];
-	return (line);
-}
-
-static char	*read_file(int fd, char *store)
-{
-	char	*buffer;
 	ssize_t	bytes;
 
-	buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
-	if (!buffer)
-		return (NULL);
 	bytes = 1;
-	while (bytes > 0 && !ft_strchr(buffer, '\n'))
+	if (!store)
+		store = ft_strdup("");
+	while (bytes > 0)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes == -1)
 		{
 			free(buffer);
-			free(store);
 			return (NULL);
 		}
 		buffer[bytes] = '\0';
 		store = ft_strjoin(store, buffer);
-		if (!store)
-		{
-			free(buffer);
-			return (NULL);
-		}
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
 	free(buffer);
 	return (store);
 }
 
-char	*get_next_line(int fd)
+static char	*get_new_store(char *store)
 {
-	static char	*store;
-	char		*line;
-	
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (free(store), NULL);
-	store = read_file(fd, store);
-	if (!store)
+	int		len;
+	int		i;
+	char	*new_store;
+
+	len = 0;
+	i = 0;
+	if (store == NULL)
 		return (NULL);
-	line = get_line(store);
-	if (!line && store)
+	while (store[len] != '\n' && store[len])
+		len++;
+	if (store[len] == '\n')
+		len++;
+	new_store = (char *)malloc((ft_strlen(store) - len + 1) * sizeof(char));
+	if (!new_store)
+		return (NULL);
+	while (store[len + i])
 	{
-		free(store);
-		store = NULL;
-		return (NULL);
+		new_store[i] = store[len + i];
+		i++;
 	}
-	store = free_store(store);
+	free(store);
+	new_store[i] = '\0';
+	return (new_store);
+}
+
+static char	*get_line(char *store, char *line)
+{
+	int	len;
+	int	i;
+
+	len = 0;
+	i = 0;
+	if (store == NULL)
+		return (NULL);
+	while (store[len] != '\n' && store[len])
+		len++;
+	if (store[len] == '\n')
+		len++;
+	line = (char *)malloc((len + 1) * sizeof(char));
+	if (!line)
+		return (NULL);
+	while (i < len)
+	{
+		line[i] = store[i];
+		i++;
+	}
+	line[i] = '\0';
 	return (line);
 }
 
+char	*get_next_line(int fd)
+{
+	static char	*store;
+	char		*buffer;
+	char		*line;
 
+	line = NULL;
+	buffer = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		free(store);
+		free(buffer);
+		buffer = NULL;
+		store = NULL;
+		return (NULL);
+	}
+	if (!buffer)
+		return (NULL);
+	store = fill_store(fd, store, buffer);
+	if (*store == '\0')
+	{
+		free(store);
+		return (store = 0);
+	}
+	line = get_line(store, line);
+	store = get_new_store(store);
+	return (line);
+}
+
+/*
 int	main(void)
 {
 	int	fd;
 	char *line;
 
-	fd = open("text2.txt", O_RDONLY);
+	fd = open("big_line_no_nl", O_RDONLY);
 	if (fd < 0)
 	{
 		perror("Error opening file");
@@ -128,3 +137,4 @@ int	main(void)
 	close(fd);
 	return (0);
 }
+*/

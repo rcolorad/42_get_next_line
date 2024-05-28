@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:03 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/27 16:19:50 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/28 12:36:16 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,12 @@ static char	*get_line(char *store, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*store[FOPEN_MAX];
+	static char	*store[1024];
 	char		*buffer;
 	char		*line;
 
 	line = NULL;
-	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	buffer = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
 		free(store[fd]);
@@ -107,7 +107,7 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	store[fd] = fill_store(fd, store[fd], buffer);
-	if (*store[fd] == '\0')
+	if (*(store[fd]) == '\0')
 	{
 		free(store[fd]);
 		return (store[fd] = 0);
@@ -116,13 +116,35 @@ char	*get_next_line(int fd)
 	store[fd] = get_new_store(store[fd]);
 	return (line);
 }
+
 /*
-int main(void){
-	int fds[2];
-	char *files[2] = {"text.txt", "text2.txt"};
+int	main(void)
+{
+	int	fd;
+	char *line;
+
+	fd = open("text2.txt", O_RDONLY);
+	if (fd < 0)
+	{
+		perror("Error opening file");
+		return (1);
+	}
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return (0);
+}
+
+int main(void)
+{
+	int fds[3];
+	char *files[3] = {"text.txt", "text2.txt", "text3.txt"};
 	char *line;
 	int openf = 0;
-	for(int i = 0; i< 2; i++)
+	for(int i = 0; i< 3; i++)
 	{
 		fds[i] = open(files[i], O_RDONLY);
 		openf++;		
@@ -134,16 +156,20 @@ int main(void){
 	{
 		for(int i = 0; i < openf; i++)
 		{
-			if((line = get_next_line(fds[i])) != NULL)
-			{
-				printf("%s", line);
-				free(line);	
-			}				
-			else
-			{
-				fds[i] = -1;
-				close(fds[i]);
-				active--;
+			if (fds[i] != -1)
+			{	
+				line = get_next_line(fds[i]);
+				if (line != NULL)
+				{
+					printf("%s", line);
+					free(line);
+				}
+				else
+				{
+					close(fds[i]);
+					active--;
+					fds[i] = -1;
+				}
 			}
 
 		}
