@@ -6,7 +6,7 @@
 /*   By: rcolorad <rcolorad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 12:52:03 by rcolorad          #+#    #+#             */
-/*   Updated: 2024/05/28 12:36:16 by rcolorad         ###   ########.fr       */
+/*   Updated: 2024/05/30 12:26:54 by rcolorad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*get_next_line(int fd)
 
 	line = NULL;
 	buffer = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 	{
 		free(store[fd]);
 		free(buffer);
